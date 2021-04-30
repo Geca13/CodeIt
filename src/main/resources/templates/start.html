@@ -14,97 +14,32 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-warning">
-        <a class="navbar-brand" href="#">DZIKLE'S EXPRESS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto topnav">
-            
-            <li class="nav-item dropdown ">
-            <div sec:authorize="isAuthenticated()">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Me
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="navbar-brand" ><span sec:authentication="principal.authorities">User</span></a>
-                        <div class="dropdown-divider"></div>
-                        <a class="nav-item nav-link"  th:href="@{/profile}" sec:authentication="principal.username"> Welcome <span >User</span></a>
-                        <div class="dropdown-divider"></div>
-                        <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="nav-item nav-link" >Logout</a>
-                    </div>
-                    </div>
-                </li>
-                 
-                <li class="nav-item ">
-                    <a class="nav-link" href="#" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a th:href="@{/products}" class="nav-item nav-link" >Products</a>
-                </li>
-                <li class="nav-item">
-                    <a th:href="@{/profile/cart}" class="nav-item nav-link" > My Shopping Cart</a>
-                </li>
-                
-                <li class="nav-item">
-                <div sec:authorize="hasRole('ROLE_ADMIN')">
-                    <a th:href="@{/administration}" class="nav-item nav-link" > Administration</a>
-               </div>
-                </li>
-                <li class="nav-item">
-                <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
-                    <a class="nav-link btn btn-primary text-white" type="button" href="#" data-toggle="modal" data-target="#myModal">Sign In/Register</a>                  
-               </div>
-                </li>
-                
-               </ul>
-        </div>
-         <div class="modal" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Customer Sign In</h4>
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                </div>
-
-               
-    
-    
-    
-   
-     
-
-                
-            </div>
-        </div>
-    </div>
- </nav>
-
 <div class="container">
-  
-  <div th:if="${param.emptyPost}">
-     <div class="alert alert-info">Sorry but you didn't write anything in the comment box </div>
-    </div>
-    
-    <div th:if="${param.post}">
-     <div class="alert alert-success">Your post was published successfully , thank you!!!</div>
-    </div>
 
- <h1>Product Details</h1>
- 
- 
-  <table class="table table-striped" th:object="${task}">
+
+ <div class="row">
+    <div class="col">
+    
+    <div th:if ="${next eq null} and not ${current eq null} ">
+       <h3>You are on your last exercise </h3>
+       
+   </div>
+   
+    <div th:if ="${next eq null} and ${current eq null} ">
+       <h3>You Are Done</h3>
+       
+   </div>
+   
+       <div th:unless="${next?.id eq null}">
+      
+       <table  class="table table-striped" th:object="${next}">
   
       <tr>
         <th></th>
        
       </tr>
       <tr>
-        <th>Product Name</th>
+        <th>Exercise  id</th>
         <td><b th:text="*{id}"></b></td>
       </tr>
       <tr>
@@ -122,15 +57,116 @@
     
       
     </table>
+    </div>
+      
+    </div>
+    <div class="col-6">
+       <div th:if ="${current eq null} and not ${next eq null} or ${current?.id eq null} and not ${next eq null} ">
+       <h3>Start Excersizing</h3>
+       <a th:href="@{/startTask}" class="btn btn-success btn-sm">start</a>
+    </div>
+    <div th:if ="${current eq null} and ${next eq null}  or ${current.id eq null} and ${next eq null}">
+       <h3>Start New Exersize</h3>
+       <a th:href="@{/}" class="btn btn-success btn-sm">GO</a>
+       
+       </div>
+       
+       
+      
+       <table th:unless="${current eq null} or ${current.id eq null}" class="table table-striped" >
+   <thead>
+    <tr>
+      <th scope="col">
+    Id
+      </th>
+      <th scope="col">
+     Product Name
+       </th>
+      <th scope="col">
+      Action
+      </th>
+      
+     
+      </tr>
+  </thead>
+  <tbody>
+    <tr th:each="product : ${taskInProgress}">
+      <td th:text="${product.id}"></td>
+      <td th:text="${product.description}"></td>
+     
+    <td><a th:href="@{/completeTask}" class="btn btn-success btn-sm">Complete</a>
+        <a th:href="@{/skip}" class="btn btn-danger btn-sm">Skip</a>
+     </td> 
+    <!--  
+      <td>
+         
+     
+      
+      </div>
+      <img th:src="*{'data:image/png;base64,'+{product.image}}" style="width:200px">
+      <td>
+      -->
+    </tr>
+     </tbody>
+    
+      
+    </table>
+      
+    </div>
+    <div class="col">
+      
+       <table class="table table-striped ">
+  <thead>
+    <tr>
+      <th scope="col">
+    Id
+      </th>
+      <th scope="col">
+     Description
+       </th>
+      <th scope="col">
+      status
+      </th>
+      
+     
+      </tr>
+  </thead>
+  <tbody>
+    <tr th:each="product : ${completedTasks}">
+      <td th:text="${product.id}"></td>
+      <td th:text="${product.description}"></td>
+      <td th:text="${product.status.displayValue}"></td>
+    
+    <!--  
+      <td>
+         
+     
+      
+      </div>
+      <img th:src="*{'data:image/png;base64,'+{product.image}}" style="width:200px">
+      <td>
+      -->
+    </tr>
+     </tbody>
+</table>
+      
+    </div>
+  </div>
+  
+
+
    
     <hr>
     
     <br>
     
-   
+    
+
+  
     
    
 </div>
+
 
 
 
@@ -143,6 +179,12 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
   </script>
+  
+ <script type="text/javascript" th:src="@{/js/js.js}"></script>
+ 
+ 
+  
+  
 </body>
 
 </html>
