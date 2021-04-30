@@ -19,23 +19,22 @@ import com.example.codeit.entity.Task;
 public class Controller {
 	
 	
-	Task task1 = new Task(1,"30 Pushups in 30 seconds",null,30,false,"");
-	Task task2 = new Task(2,"30 ABS in 20 seconds",null,30,false,"");
-	Task task3 = new Task(3,"15 Pushups in 13 seconds",null,15,false,"");
-	Task task4 = new Task(4,"25 ABS in 30 seconds",null,25,false,"");
-	Task task5 = new Task(5,"50 kg , 10 Bench Lifts",null,10,false,"");
-	Task task6 = new Task(6,"30 kg , 8 Biceps Lifts",null,8,false,"");
-	Task task7 = new Task(7,"70 kg , 6 Bench Lifts",null,6,false,"");
-	Task task8 = new Task(8,"70 kg , 6 SitUps",null,6,true,"");
-	Task task9 = new Task(9,"80 kg , 4 SitUps",null,4,true,"");
-	Task task10 = new Task(10,"80 kg , 6 Bench Lifts",null,6,true,"");
+	Task task1 = new Task(1,"30 Pushups in 30 seconds",null,30,false,"../img/pushups.webp");
+	Task task2 = new Task(2,"30 ABS in 20 seconds",null,30,false,"../img/abs1.webp");
+	Task task3 = new Task(3,"15 Pushups in 13 seconds",null,15,false,"../img/withclap.webp");
+	Task task4 = new Task(4,"25 ABS in 30 seconds",null,25,false,"../img/abs2.webp");
+	Task task5 = new Task(5,"50 kg , 10 Bench Lifts",null,10,false,"../img/bench2.gif");
+	Task task6 = new Task(6,"30 kg , 8 Biceps Lifts",null,8,false,"../img/biceps2.gif");
+	Task task7 = new Task(7,"70 kg , 6 Biceps Lifts",null,6,false,"../img/biceps1.webp");
+	Task task8 = new Task(8,"70 kg , 6 SitUps",null,6,true,"../img/situps.webp");
+	Task task9 = new Task(9,"80 kg , 4 Overhead lifts",null,4,true,"../img/overhead1.gif");
+	Task task10 = new Task(10,"80 kg , 6 Bench Lifts",null,6,true,"../img/bench1.gif");
 	
 	List<Task> availableTasks = new ArrayList<>();
 	LinkedList<Task> selectedTasks = new LinkedList<>();
 	Stack<Task> scheduledTasks = new Stack<>();
 	Stack<Task> taskInProgress = new Stack<>();
 	List<Task> completedTasks = new ArrayList<>();
-	
 	
 	@GetMapping("/")
 	public String openTasksPage (Model model) {
@@ -142,8 +141,9 @@ public class Controller {
 		
 		Task task = taskInProgress.peek();
 		task.setStatus(Status.PROCESSED);
+		Integer number = Integer.valueOf(task.getDescription().substring(0, 2));
 		model.addAttribute("task", task);
-		
+		model.addAttribute("number", number);
 		completedTasks.add(task);
 		
 		taskInProgress.pop();

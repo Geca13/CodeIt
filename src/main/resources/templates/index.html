@@ -20,6 +20,7 @@
  <div class="row">
   <div class="col-8">
   
+  <h4>Available Exercises</h4>
   <table class="table table-striped ">
   <thead>
     <tr>
@@ -40,8 +41,10 @@
     <tr th:each="product : ${availableTasks}" th:unless="${selectedTasks.contains(product)}">
       <td th:text="${product.id}"></td>
       <td th:text="${product.description}"></td>
+      
+      <td><img th:src="${product.url}"></td>
      
-    <td th:if="${selectedTasks.size()<5}"  ><a th:href="@{/addTask/{id}(id=${product.id})}"  class="btn btn-success btn-sm">Add to Cart</a> </td> 
+    <td th:if="${selectedTasks.size()<5}"  ><a th:href="@{/addTask/{id}(id=${product.id})}"  class="btn btn-success btn-sm">Add </a> </td> 
     <!--  
       <td>
          
@@ -57,7 +60,7 @@
   
   </div>
   <div class="col-4">
-  
+  <h4>Selected Exercises</h4>
   <table class="table table-striped ">
   <thead>
     <tr>
@@ -93,7 +96,7 @@
      </tbody>
 </table>
   
-  <a th:href="@{/peek}" class="btn btn-success btn-sm">GO !</a>
+  <a th:unless="${selectedTasks.isEmpty()}" th:href="@{/peek}" class="btn btn-success btn-sm">GO !</a>
   </div>
   
 </div>

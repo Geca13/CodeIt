@@ -35,7 +35,7 @@
         <td><b th:text="*{id}"></b></td>
       </tr>
       <tr>
-        <th>Price</th>
+        <th>Description</th>
         <td th:text="*{description}"></td>
       </tr>
       
@@ -63,7 +63,7 @@
    <div class="row begin-countdown">
   <div class="col-md-12 text-center">
     <progress value="10" max="10" id="pageBeginCountdown"></progress>
-    <p> Remaining  <span id="pageBeginCountdownText">10 </span> seconds</p>
+    <p> Remaining  <span id="pageBeginCountdownText">[[${number}]] </span> seconds</p>
   </div>
 </div>
     
@@ -89,7 +89,7 @@
  
  <script>
  
- ProgressCountdown(10, 'pageBeginCountdown', 'pageBeginCountdownText');
+ ProgressCountdown([[${number}]], 'pageBeginCountdown', 'pageBeginCountdownText');
 
  function ProgressCountdown(timeleft, bar, text) {
    return new Promise((resolve, reject) => {

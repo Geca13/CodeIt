@@ -43,7 +43,7 @@
         <td><b th:text="*{id}"></b></td>
       </tr>
       <tr>
-        <th>Price</th>
+        <th>Description</th>
         <td th:text="*{description}"></td>
       </tr>
       <tr>
@@ -62,11 +62,11 @@
     </div>
     <div class="col-6">
        <div th:if ="${current eq null} and not ${next eq null} or ${current?.id eq null} and not ${next eq null} ">
-       <h3>Start Excersizing</h3>
+       <h3>Start Exercising</h3>
        <a th:href="@{/startTask}" class="btn btn-success btn-sm">start</a>
     </div>
     <div th:if ="${current eq null} and ${next eq null}  or ${current.id eq null} and ${next eq null}">
-       <h3>Start New Exersize</h3>
+       <h3>Start New Exercise</h3>
        <a th:href="@{/}" class="btn btn-success btn-sm">GO</a>
        
        </div>
