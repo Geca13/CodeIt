@@ -16,58 +16,33 @@
 
 <div class="container">
 
-
- <div class="row">
-    <div class="col">
-    
-   
-   
-       
-      
-       <table  class="table table-striped" th:object="${task}">
-  
-      <tr>
-        <th></th>
-       
-      </tr>
-      <tr>
-        <th>Exercise  id</th>
-        <td><b th:text="*{id}"></b></td>
-      </tr>
-      <tr>
-        <th>Description</th>
-        <td th:text="*{description}"></td>
-      </tr>
-      
-    
-      
-    </table>
-    </div>
-      
-    </div>
-  
-       
-      
-       
+<div class="row">
 
 
-   
-    <hr>
-    
-    <br>
-    
-    
 
- 
+ <div class="col" style= margin-left:180px>
+    
+    <div  class="card mb-4 border-0" style="width: 40rem;" th:object="${task}">
+  <img  class="card-img-top" th:src="*{url}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">Status: Processing...</h5>
+    <h4 th:text="*{description}" class="card-title"></h4>
    
-   <div class="row begin-countdown">
+  </div>
+</div>
+       <div class="row begin-countdown">
   <div class="col-md-12 text-center">
-    <progress value="10" max="10" id="pageBeginCountdown"></progress>
+    <progress th:value="${number}" th:max = "${number}"   id="pageBeginCountdown"></progress>
     <p> Remaining  <span id="pageBeginCountdownText">[[${number}]] </span> seconds</p>
   </div>
 </div>
     
+    </div>
+  
+      
    
+  
+   </div>
 </div>
 
 
@@ -83,7 +58,7 @@
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
   </script>
   
- <script type="text/javascript" th:src="@{/js/js.js}"></script>
+ 
  
  
  

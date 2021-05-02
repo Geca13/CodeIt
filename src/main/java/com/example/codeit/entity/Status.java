@@ -3,7 +3,6 @@ package com.example.codeit.entity;
 public enum Status {
 	
 	NOT_PROCESSED("Not Processed"),
-	PROCESSING("Processing..."),
 	PROCESSED("Processed"),
 	FAILED("Failed");
 

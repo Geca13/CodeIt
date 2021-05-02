@@ -15,157 +15,123 @@
 <body>
 
 <div class="container">
+<div th:hidden ="${next eq null} and ${current eq null} " class="col">
+
+<div th:if ="${next eq null} and not ${current eq null} ">
+       <div class="card border-0" style="width: 19rem;">
+  <img class="card-img-top" src="../img/last.gif" alt="Card image cap">
+  
+</div>
+       
+   </div>
+  <div th:unless="${next?.id eq null}">
+<div class="card border-0" th:object="${next}" style="width: 19rem;">
+            <div class="row no-gutters">
+                <div class="col-sm-5">
+                    <img class="card-img" th:src="*{url}" alt="">
+                </div>
+                <div class="col-sm-7">
+                    <div class="card-body">
+                        <h5 class="card-title">Coming Later!!!</h5>
+                        <p th:text="*{description}" class="card-text"></p>
+                       <h6 th:text="*{status.displayValue}" class="card-title">Up Next</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+
+
 
 
  <div class="row">
-    <div class="col">
     
-    <div th:if ="${next eq null} and not ${current eq null} ">
-       <h3>You are on your last exercise </h3>
+    <div class="col-6" th:hidden ="${next eq null} and ${current eq null} ">
        
-   </div>
+       
+  <div th:unless="${current eq null} or ${current.id eq null}" class="card mb-4 border-0" style="width: 35rem;margin-left:200px" th:object="${current}">
+  <img  class="card-img-top" th:src="*{url}" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">Status: UP Next !!!</h5>
+    <a th:href="@{/skip}" class="btn btn-danger btn-sm">Skip</a>
+    <a th:href="@{/back}" class="btn btn-success btn-sm">Back</a>
+    <h4 th:text="*{description}" class="card-title"></h4>
+    <div class="row begin-countdown">
+  <div class="col-md-12 text-center">
+    <progress value="10" max = "10"   id="pageBeginCountdown"></progress>
+    <p> Exercise starts in  <span id="pageBeginCountdownText">10 </span> seconds</p>
+  </div>
+</div>
    
-    <div th:if ="${next eq null} and ${current eq null} ">
-       <h3>You Are Done</h3>
-       
-   </div>
+  </div>
+</div>
+    
+    
+      
+    </div>
+    <div th:unless="${completedTasks.isEmpty()}" class="col" >
+      
+     <div class="row" th:if ="${current eq null} and ${next eq null}  or ${current.id eq null} and ${next eq null}">
+  <div class="col-xl-3" th:each="task : ${completedTasks}">
+          <div th:if="${task.status.displayValue} eq 'Failed'" class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+         <div th:text="${task.status.displayValue}" class="card-header"></div>
+         <div class="card-body">
+         <h5 th:text="${task.description}" class="card-title"></h5>
+
+         </div>
+         </div>
+         
+         <div th:unless="${task.status.displayValue} eq 'Failed'" class="card text-white bg-info mb-3" style="max-width: 18rem;">
+         <div th:text="${task.status.displayValue}" class="card-header">Header</div>
+         <div class="card-body">
+         <h5 th:text="${task.description}" class="card-title"></h5>
+          
+         </div>
+         </div>
    
-       <div th:unless="${next?.id eq null}">
-      
-       <table  class="table table-striped" th:object="${next}">
-  
-      <tr>
-        <th></th>
-       
-      </tr>
-      <tr>
-        <th>Exercise  id</th>
-        <td><b th:text="*{id}"></b></td>
-      </tr>
-      <tr>
-        <th>Description</th>
-        <td th:text="*{description}"></td>
-      </tr>
-      <tr>
-        <th>Status</th>
-        <td th:text="*{status}"></td>
-      </tr>
-      <tr>
-        <th>IsRisky</th>
-        <td th:text="*{isRisky}"></td>
-      </tr>
-    
-      
-    </table>
-    </div>
-      
-    </div>
-    <div class="col-6">
-       <div th:if ="${current eq null} and not ${next eq null} or ${current?.id eq null} and not ${next eq null} ">
-       <h3>Start Exercising</h3>
-       <a th:href="@{/startTask}" class="btn btn-success btn-sm">start</a>
-    </div>
-    <div th:if ="${current eq null} and ${next eq null}  or ${current.id eq null} and ${next eq null}">
-       <h3>Start New Exercise</h3>
-       <a th:href="@{/}" class="btn btn-success btn-sm">GO</a>
-       
-       </div>
-       
-       
-      
-       <table th:unless="${current eq null} or ${current.id eq null}" class="table table-striped" >
-   <thead>
-    <tr>
-      <th scope="col">
-    Id
-      </th>
-      <th scope="col">
-     Product Name
-       </th>
-      <th scope="col">
-      Action
-      </th>
-      
-     
-      </tr>
-  </thead>
-  <tbody>
-    <tr th:each="product : ${taskInProgress}">
-      <td th:text="${product.id}"></td>
-      <td th:text="${product.description}"></td>
-     
-    <td><a th:href="@{/completeTask}" class="btn btn-success btn-sm">Complete</a>
-        <a th:href="@{/skip}" class="btn btn-danger btn-sm">Skip</a>
-     </td> 
-    <!--  
-      <td>
-         
-     
-      
-      </div>
-      <img th:src="*{'data:image/png;base64,'+{product.image}}" style="width:200px">
-      <td>
-      -->
-    </tr>
-     </tbody>
-    
-      
-    </table>
-      
-    </div>
-    <div class="col">
-      
-       <table class="table table-striped ">
-  <thead>
-    <tr>
-      <th scope="col">
-    Id
-      </th>
-      <th scope="col">
-     Description
-       </th>
-      <th scope="col">
-      status
-      </th>
-      
-     
-      </tr>
-  </thead>
-  <tbody>
-    <tr th:each="product : ${completedTasks}">
-      <td th:text="${product.id}"></td>
-      <td th:text="${product.description}"></td>
-      <td th:text="${product.status.displayValue}"></td>
-    
-    <!--  
-      <td>
-         
-     
-      
-      </div>
-      <img th:src="*{'data:image/png;base64,'+{product.image}}" style="width:200px">
-      <td>
-      -->
-    </tr>
-     </tbody>
-</table>
-      
-    </div>
+   </div>
   </div>
   
+  <div style="margin-left:250px" class="col" th:each="task : ${completedTasks}" th:unless="${current eq null} and ${next eq null}  or ${current.id eq null} and ${next eq null}">
+          <div th:if="${task.status.displayValue} eq 'Failed'" class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+         <div th:text="${task.status.displayValue}" class="card-header">Header</div>
+         <div class="card-body">
+         <h5 th:text="${task.description}" class="card-title"></h5>
 
-
+         </div>
+         </div>
+         
+         <div th:unless="${task.status.displayValue} eq 'Failed'" class="card text-white bg-info mb-3" style="max-width: 18rem;">
+         <div th:text="${task.status.displayValue}" class="card-header">Header</div>
+         <div class="card-body">
+         <h5 th:text="${task.description}" class="card-title"></h5>
+          
+         </div>
+         </div>
    
-    <hr>
-    
-    <br>
-    
-    
-
+   </div>
   
+ </div>
+ 
+      
+    </div>
+    <hr>
+    <div th:if ="${current eq null} and ${next eq null}  or ${current.id eq null} and ${next eq null}">
+       
+       <a th:href="@{/}" class="btn btn-warning btn-sm">Continue with new exercises</a>
+       <a th:href="@{/newStart}" class="btn btn-success btn-sm">Reset And Start Over</a>
+       
+       </div>
+   
+  </div>
+  
+   
+   
+       
+       
     
    
-</div>
 
 
 
@@ -180,7 +146,29 @@
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
   </script>
   
- <script type="text/javascript" th:src="@{/js/js.js}"></script>
+ <script>
+ 
+ ProgressCountdown(10, 'pageBeginCountdown', 'pageBeginCountdownText');
+
+ function ProgressCountdown(timeleft, bar, text) {
+   return new Promise((resolve, reject) => {
+     var countdownTimer = setInterval(() => {
+       timeleft--;
+
+       document.getElementById(bar).value = timeleft;
+       document.getElementById(text).textContent = timeleft;
+
+       if (timeleft <= 0) {
+         clearInterval(countdownTimer);
+         resolve(true);
+         window.location = "http://localhost:8081/completeTask";
+       }
+     }, 1000);
+   });
+ }
+ 
+ 
+ </script>
  
  
   

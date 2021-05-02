@@ -22,8 +22,6 @@ public class Task {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 	
-	private Integer minRepeats;
-	
 	private Boolean isRisky;
 	
 	private String url;

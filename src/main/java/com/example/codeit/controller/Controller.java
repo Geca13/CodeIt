@@ -1,17 +1,12 @@
 package com.example.codeit.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import com.example.codeit.entity.Status;
 import com.example.codeit.entity.Task;
 
@@ -19,16 +14,16 @@ import com.example.codeit.entity.Task;
 public class Controller {
 	
 	
-	Task task1 = new Task(1,"30 Pushups in 30 seconds",null,30,false,"../img/pushups.webp");
-	Task task2 = new Task(2,"30 ABS in 20 seconds",null,30,false,"../img/abs1.webp");
-	Task task3 = new Task(3,"15 Pushups in 13 seconds",null,15,false,"../img/withclap.webp");
-	Task task4 = new Task(4,"25 ABS in 30 seconds",null,25,false,"../img/abs2.webp");
-	Task task5 = new Task(5,"50 kg , 10 Bench Lifts",null,10,false,"../img/bench2.gif");
-	Task task6 = new Task(6,"30 kg , 8 Biceps Lifts",null,8,false,"../img/biceps2.gif");
-	Task task7 = new Task(7,"70 kg , 6 Biceps Lifts",null,6,false,"../img/biceps1.webp");
-	Task task8 = new Task(8,"70 kg , 6 SitUps",null,6,true,"../img/situps.webp");
-	Task task9 = new Task(9,"80 kg , 4 Overhead lifts",null,4,true,"../img/overhead1.gif");
-	Task task10 = new Task(10,"80 kg , 6 Bench Lifts",null,6,true,"../img/bench1.gif");
+	Task task1 = new Task(1,"30 sec = 30 Pushups",null,false,"../img/pushups.webp");
+	Task task2 = new Task(2,"20 sec = 30 ABS",null,false,"../img/abs1.webp");
+	Task task3 = new Task(3,"13 sec = 15 Pushups",null,false,"../img/withclap.webp");
+	Task task4 = new Task(4,"30 sec = 25 ABS",null,false,"../img/abs2.webp");
+	Task task5 = new Task(5,"55 sec = 10 Bench Lifts X 50 kg",null,false,"../img/bench2.gif");
+	Task task6 = new Task(6,"55 sec = 8 Biceps Lifts X 30 kg",null,false,"../img/biceps2.gif");
+	Task task7 = new Task(7,"75 sec = 6 Biceps Lifts X 70 kg",null,false,"../img/biceps1.webp");
+	Task task8 = new Task(8,"85 sec = 6 SitUps X 70 kg ",null,true,"../img/situps.webp");
+	Task task9 = new Task(9,"85 sec = 4 Overhead lifts X 80 kg",null,true,"../img/overhead1.gif");
+	Task task10 = new Task(10,"105 sec = 6 Bench Lifts X 80 kg",null,true,"../img/bench1.gif");
 	
 	List<Task> availableTasks = new ArrayList<>();
 	LinkedList<Task> selectedTasks = new LinkedList<>();
@@ -39,7 +34,7 @@ public class Controller {
 	@GetMapping("/")
 	public String openTasksPage (Model model) {
 		
-		if(availableTasks.isEmpty()) {
+		if(availableTasks.isEmpty() && completedTasks.isEmpty()) {
 			
 		availableTasks.add(task1);
 		availableTasks.add(task2);
@@ -53,6 +48,17 @@ public class Controller {
 		availableTasks.add(task10);
 		
 		}
+		
+		List<Task> toRemove = new ArrayList<Task>();
+		
+		for (Task task : availableTasks) {
+			if(!completedTasks.isEmpty() && completedTasks.contains(task) ) {
+				toRemove.add(task);
+			}
+		}
+		
+		availableTasks.removeAll(toRemove);
+		
 		model.addAttribute("availableTasks", availableTasks);
 		model.addAttribute("selectedTasks", selectedTasks);
 		
@@ -62,12 +68,15 @@ public class Controller {
 	@GetMapping("/addTask/{id}")
 	public String addTaskInList(@PathVariable("id")Integer id) {
 		
+		List<Task> toRemove = new ArrayList<Task>();
+		
 		for (Task task : availableTasks) {
 			if(task.getId() == id) {
 			selectedTasks.addFirst(task);
+			toRemove.add(task);
 			}
 		}
-		
+		availableTasks.removeAll(toRemove);
 		return "redirect:/";
 		
 	}
@@ -79,6 +88,7 @@ public class Controller {
 		
 		for (Task task : selectedTasks) {
 			if(task.getId() == id) {
+			availableTasks.add(task);
 			   toRemove.add(task);
 			}
 		}
@@ -88,34 +98,19 @@ public class Controller {
 		
 	}
 	
-	@GetMapping("/peek")
-	public String startTasks(Model model, @ModelAttribute("current") Task current) {
-		
-		List<Task> toRemove = new ArrayList<Task>();
-			
-			for (Task task : selectedTasks) {
-				task.setStatus(Status.NOT_PROCESSED);
-				scheduledTasks.push(task);
-				
-				toRemove.add(task);
-			}
-			
-		Task next = scheduledTasks.peek();
-		model.addAttribute("next", next);
-		
-		model.addAttribute("completedTasks",completedTasks);
-		
-		selectedTasks.removeAll(toRemove);
-		Integer number = 30;
-		model.addAttribute("number",number);
-		return "start";
-		
-	}
-	
-	
-	
 	@GetMapping("/startTask")
 	public String completeTasks(Model model) throws InterruptedException {
+		
+		List<Task> toRemove = new ArrayList<Task>();
+		
+		for (Task task : selectedTasks) {
+			task.setStatus(Status.NOT_PROCESSED);
+			scheduledTasks.push(task);
+			
+			toRemove.add(task);
+		}
+		
+		selectedTasks.removeAll(toRemove);
 		
 		if(!scheduledTasks.isEmpty()) {
 		   Task current = scheduledTasks.pop();
@@ -127,13 +122,29 @@ public class Controller {
 		}
 		
 		taskInProgress.push(current);
-		     model.addAttribute("taskInProgress", taskInProgress);
+		
 	    }
 		     model.addAttribute("completedTasks", completedTasks);
 		
 		return "start";
 	}
 	
+	@GetMapping("/back")
+	public String backToSelectingPage() {
+		
+		selectedTasks.add(taskInProgress.pop());
+		
+		for (Task task : scheduledTasks) {
+		    scheduledTasks.peek();
+		    selectedTasks.add(task);
+			
+			
+		}
+		scheduledTasks.clear();
+		
+		return "redirect:/";
+		
+	}
 	
   
 	@GetMapping("/completeTask")
@@ -141,7 +152,7 @@ public class Controller {
 		
 		Task task = taskInProgress.peek();
 		task.setStatus(Status.PROCESSED);
-		Integer number = Integer.valueOf(task.getDescription().substring(0, 2));
+		Integer number = Integer.valueOf(task.getDescription().substring(0, task.getDescription().indexOf(" ")));
 		model.addAttribute("task", task);
 		model.addAttribute("number", number);
 		completedTasks.add(task);
@@ -151,7 +162,6 @@ public class Controller {
 		return "counter";
 		
 	}
-	
 	
 	@GetMapping("/skip")
 	public String skipTask() {
@@ -165,14 +175,20 @@ public class Controller {
 		
 	}
 	
-	@GetMapping("/startTimer")
-	public String timer (Model model) {
-		model.addAttribute("endDate", LocalDateTime.now().plusSeconds(20));
-		return "redirect:/startTask";
-
+	@GetMapping("/newStart")
+	public String startOver() {
+		
+		for (Task task : completedTasks) {
+			availableTasks.add(task);
+			
+			
+		}
+		
+		completedTasks.clear();
+		
+		return "redirect:/";
+		
 	}
 	
-	
-	
-	
+
 }

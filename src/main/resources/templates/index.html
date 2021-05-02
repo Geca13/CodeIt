@@ -16,101 +16,76 @@
 
  <div class="container">
  
+ <div class="row" th:if="${availableTasks.isEmpty()} and ${selectedTasks.isEmpty()}">
+ 
+ <div  class="col card border-0" style="width: 28rem; margin-top:15px">
+  <img class="card-img-top" src="../img/nothing.jpg" alt="Card image cap">
+  
+  </div>
+  
+  <div  class="col card border-0" style="width: 28rem; margin-top:15px">
+    <h1>Where did the exercises go?????</h1>
+    <a th:href="@{/newStart}" class="btn btn-success btn-sm">Reset And Start Over</a>
+  </div>
+  </div>
  
  <div class="row">
-  <div class="col-8">
-  
+ 
+<div class="col">
+  <div th:if="${availableTasks.isEmpty()} and not ${selectedTasks.isEmpty()}">
   <h4>Available Exercises</h4>
-  <table class="table table-striped ">
+  <div  class="card border-0" style="width: 28rem; margin-top:15px">
+  <img class="card-img-top" src="../img/nothing.jpg" alt="Card image cap">
+  <a th:href="@{/newStart}" class="btn btn-success btn-sm">Reset And Start Over</a>
+  </div>
+  </div>
+  <table th:unless="${availableTasks.isEmpty()}" class="table table-striped ">
   <thead>
     <tr>
-      <th scope="col">
-    Id
-      </th>
-      <th scope="col">
-     Product Name
-       </th>
-      <th scope="col">
-      Action
-      </th>
-      
-     
-      </tr>
+      <th scope="col">Id</th>
+      <th scope="col"> Description</th>
+      <th scope="col">Action</th>
+    </tr>
   </thead>
   <tbody>
-    <tr th:each="product : ${availableTasks}" th:unless="${selectedTasks.contains(product)}">
-      <td th:text="${product.id}"></td>
-      <td th:text="${product.description}"></td>
+    <tr th:each="task : ${availableTasks}" >
+      <td th:text="${task.id}"></td>
+      <td th:text="${task.description}"></td>
       
-      <td><img th:src="${product.url}"></td>
-     
-    <td th:if="${selectedTasks.size()<5}"  ><a th:href="@{/addTask/{id}(id=${product.id})}"  class="btn btn-success btn-sm">Add </a> </td> 
-    <!--  
-      <td>
-         
-     
+      <td><img th:src="${task.url}" style=width:80px></td>
       
-      </div>
-      <img th:src="*{'data:image/png;base64,'+{product.image}}" style="width:200px">
-      <td>
-      -->
+      
+     
+    <td th:if="${selectedTasks.size()<5}"  ><a th:href="@{/addTask/{id}(id=${task.id})}"  class="btn btn-success btn-sm">Select </a> </td> 
+   
     </tr>
      </tbody>
 </table>
   
   </div>
-  <div class="col-4">
+  <div class="col" th:hidden="${selectedTasks.isEmpty()}">
   <h4>Selected Exercises</h4>
   <table class="table table-striped ">
   <thead>
     <tr>
-      <th scope="col">
-    Id
-      </th>
-      <th scope="col">
-     Product Name
-       </th>
-      <th scope="col">
-      Action
-      </th>
-      
-     
-      </tr>
+      <th scope="col"> Id </th>
+      <th scope="col"> Description </th>
+      <th scope="col"> Action</th>
+    </tr>
   </thead>
   <tbody>
-    <tr th:each="product : ${selectedTasks}">
-      <td th:text="${product.id}"></td>
-      <td th:text="${product.description}"></td>
-     
-    <td><a th:href="@{/removeTask/{id}(id=${product.id})}" class="btn btn-success btn-sm">Remove</a> </td> 
-    <!--  
-      <td>
-         
-     
-      
-      </div>
-      <img th:src="*{'data:image/png;base64,'+{product.image}}" style="width:200px">
-      <td>
-      -->
+    <tr th:each="task : ${selectedTasks}">
+      <td><img th:src="${task.url}" style=width:80px></td>
+      <td th:text="${task.description}"></td>
+      <td><a th:href="@{/removeTask/{id}(id=${task.id})}" class="btn btn-danger btn-sm">Remove</a> </td> 
     </tr>
-     </tbody>
+  </tbody>
 </table>
-  
-  <a th:unless="${selectedTasks.isEmpty()}" th:href="@{/peek}" class="btn btn-success btn-sm">GO !</a>
+  <a th:unless="${selectedTasks.isEmpty()}" th:href="@{/startTask}" class="btn btn-success btn-sm">GO !</a>
   </div>
   
 </div>
 
-  
-  
-  
-  
-  
-  
-
-
-         
-      <br>
     </div>
  
  
