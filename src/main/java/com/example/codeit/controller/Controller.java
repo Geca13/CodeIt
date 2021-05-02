@@ -13,7 +13,6 @@ import com.example.codeit.entity.Task;
 @org.springframework.stereotype.Controller
 public class Controller {
 	
-	
 	Task task1 = new Task(1,"30 sec = 30 Pushups",null,false,"../img/pushups.webp");
 	Task task2 = new Task(2,"20 sec = 30 ABS",null,false,"../img/abs1.webp");
 	Task task3 = new Task(3,"13 sec = 15 Pushups",null,false,"../img/withclap.webp");
@@ -30,6 +29,7 @@ public class Controller {
 	Stack<Task> scheduledTasks = new Stack<>();
 	Stack<Task> taskInProgress = new Stack<>();
 	List<Task> completedTasks = new ArrayList<>();
+	List<Task> notProccessedTasks = new ArrayList<>();
 	
 	@GetMapping("/")
 	public String openTasksPage (Model model) {
@@ -180,13 +180,26 @@ public class Controller {
 		
 		for (Task task : completedTasks) {
 			availableTasks.add(task);
+		}
+		completedTasks.clear();
+	
+		return "redirect:/";
+	}
+	
+	@GetMapping("/cancel")
+	public String cancelExcercises(Model model) {
+		
+           completedTasks.add(taskInProgress.pop());
+		
+		for (Task task : scheduledTasks) {
+		    scheduledTasks.peek();
+		    completedTasks.add(task);
 			
 			
 		}
+		scheduledTasks.clear();
 		
-		completedTasks.clear();
-		
-		return "redirect:/";
+		return "redirect:/startTask";
 		
 	}
 	

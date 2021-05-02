@@ -54,7 +54,8 @@
   <img  class="card-img-top" th:src="*{url}" alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">Status: UP Next !!!</h5>
-    <a th:href="@{/skip}" class="btn btn-danger btn-sm">Skip</a>
+    <a th:href="@{/cancel}" class="btn btn-danger btn-sm">Full Stop</a>
+    <a th:href="@{/skip}" class="btn btn-info btn-sm">Skip</a>
     <a th:href="@{/back}" class="btn btn-success btn-sm">Back</a>
     <h4 th:text="*{description}" class="card-title"></h4>
     <div class="row begin-countdown">
@@ -82,11 +83,19 @@
          </div>
          </div>
          
-         <div th:unless="${task.status.displayValue} eq 'Failed'" class="card text-white bg-info mb-3" style="max-width: 18rem;">
+         <div th:if="${task.status.displayValue} eq 'Processed'" class="card text-white bg-info mb-3" style="max-width: 18rem;">
          <div th:text="${task.status.displayValue}" class="card-header">Header</div>
          <div class="card-body">
          <h5 th:text="${task.description}" class="card-title"></h5>
           
+         </div>
+         </div>
+         
+         <div th:if="${task.status.displayValue} eq 'Not Processed'" class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+         <div th:text="${task.status.displayValue}" class="card-header"></div>
+         <div class="card-body">
+         <h5 th:text="${task.description}" class="card-title"></h5>
+
          </div>
          </div>
    
@@ -102,11 +111,19 @@
          </div>
          </div>
          
-         <div th:unless="${task.status.displayValue} eq 'Failed'" class="card text-white bg-info mb-3" style="max-width: 18rem;">
+         <div th:if="${task.status.displayValue} eq 'Processed'" class="card text-white bg-info mb-3" style="max-width: 18rem;">
          <div th:text="${task.status.displayValue}" class="card-header">Header</div>
          <div class="card-body">
          <h5 th:text="${task.description}" class="card-title"></h5>
           
+         </div>
+         </div>
+         
+         <div th:if="${task.status.displayValue} eq 'Not Processed'" class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+         <div th:text="${task.status.displayValue}" class="card-header"></div>
+         <div class="card-body">
+         <h5 th:text="${task.description}" class="card-title"></h5>
+
          </div>
          </div>
    
